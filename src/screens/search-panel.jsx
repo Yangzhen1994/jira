@@ -1,4 +1,3 @@
-import React from 'react';
 
 export const SearchPanel = ({param, setParam, users}) => {
   return (
