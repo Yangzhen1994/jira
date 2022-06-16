@@ -29,7 +29,7 @@ export const http = async (
     config.body = JSON.stringify(data || {});
   }
 
-  console.log("config", config);
+  // console.log("config", config);
   return window.fetch(`${apiUrl}/${endPoint}`, config).then(async (res) => {
     if (res.status === 401) {
       await auth.logout();

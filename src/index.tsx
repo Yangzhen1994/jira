@@ -1,18 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import "./App.css";
+
 // import { ProjectList } from "./screens/index";
 import reportWebVitals from "./reportWebVitals";
-import { loadDevTools } from "jira-dev-tool";
+import { loadServer, DevTools } from "jira-dev-tool";
+// 在jira-dev-tool后引入 这样可以覆盖jira-dev-tool的样式
+import "antd/dist/antd.less";
 import { AppProviders } from "context";
 import App from "App";
 
-loadDevTools(() => {
+loadServer(() => {
   const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
   );
   root.render(
     <AppProviders>
+      <DevTools></DevTools>
       <App />
     </AppProviders>
   );
