@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LoginScreen } from "no-auth-app/login";
 import { RegisterScreen } from "no-auth-app/register";
-import { Card, Button, Divider } from "antd";
+import { Card, Button, Divider, Typography } from "antd";
 import styled from "@emotion/styled";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
@@ -9,13 +9,24 @@ import right from "assets/right.svg";
 
 export const UnauthApp = () => {
   const [isRegister, setIsRegister] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  useEffect(() => {
+    setError(null);
+  }, [isRegister]);
   return (
     <Container>
       <Header />
       <Background></Background>
       <ShadowCard>
         <Title>{isRegister ? "请注册" : "请登录"}</Title>
-        {isRegister ? <RegisterScreen /> : <LoginScreen />}
+        {error ? (
+          <Typography.Text type="danger">{error.message}</Typography.Text>
+        ) : null}
+        {isRegister ? (
+          <RegisterScreen onError={setError} />
+        ) : (
+          <LoginScreen onError={setError} />
+        )}
         <Divider />
         <Button type={"link"} onClick={() => setIsRegister(!isRegister)}>
           {isRegister ? "已经有帐号了？直接登录" : "没有账号？注册新账号"}

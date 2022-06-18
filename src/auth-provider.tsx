@@ -25,7 +25,7 @@ export const login = (data: LoginParam) => {
     if (res.ok) {
       return handleUserResponse(await res.json());
     } else {
-      return Promise.reject(data);
+      return Promise.reject(await res.json());
     }
   });
 };
@@ -41,7 +41,7 @@ export const register = (data: LoginParam) => {
     if (res.ok) {
       return handleUserResponse(await res.json());
     } else {
-      return Promise.reject(data);
+      return Promise.reject(await res.json());
     }
   });
 };

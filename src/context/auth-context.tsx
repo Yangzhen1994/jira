@@ -2,6 +2,10 @@ import React, { ReactNode, useState } from "react";
 import * as auth from "auth-provider";
 import { http } from "utils/http";
 import { useMount } from "utils";
+import { useAsync } from "utils/use-async";
+import { User } from "auth-provider";
+import { FullPageLoading, FullPageError } from "components/lib";
+
 interface AuthForm {
   username: string;
   password: string;
@@ -30,8 +34,16 @@ const AuthContext = React.createContext<
 AuthContext.displayName = "AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<auth.User | null>(null);
-
+  const {
+    data: user,
+    setData: setUser,
+    isIdle,
+    isLoading,
+    isSuccess,
+    isError,
+    run,
+    error,
+  } = useAsync<User | null>();
   const login = (form: AuthForm) => {
     return auth.login(form).then((user) => setUser(user));
   };
@@ -42,8 +54,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useMount(() => {
     // 这里直接 setUser   等价于 .then(user => setUser(user))
-    boorStrapUser().then(setUser);
+    run(boorStrapUser());
   });
+  if (isIdle || isLoading) {
+    return <FullPageLoading />;
+  }
+  if (error) {
+    return <FullPageError error={error} />;
+  }
   return (
     <AuthContext.Provider
       children={children}
